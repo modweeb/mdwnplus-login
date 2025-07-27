@@ -275,6 +275,60 @@
                 window.opener.postMessage('LOGIN_ERROR', '*');
             });
     });
+    
+    // أضف هذا الكود في نهاية الملف
+window.addEventListener('message', (event) => {
+  // التحقق من المصدر
+  if (event.origin !== window.location.origin) return;
+  
+  if (event.data.type === 'SET_ORIGIN') {
+    window.ORIGIN = event.data.origin;
+  }
+});
+
+// تعديل معالج تسجيل الدخول
+document.getElementById('googleSignIn').addEventListener('click', async () => {
+  try {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({
+      prompt: 'select_account',
+      redirect_uri: window.ORIGIN || 'https://mdwnplus.blogspot.com'
+    });
+    
+    // إعلام الصفحة الرئيسية ببدء العملية
+    window.parent.postMessage({ type: 'LOGIN_REDIRECT_STARTED' }, '*');
+    
+    // استخدم signInWithRedirect للتحكم الكامل
+    await auth.signInWithRedirect(provider);
+    
+  } catch (error) {
+    console.error('Login Error:', error);
+    window.parent.postMessage({
+      type: 'LOGIN_ERROR',
+      error: {
+        code: error.code,
+        message: error.message
+      }
+    }, '*');
+  }
+});
+
+// معالجة نتيجة التسجيل
+auth.getRedirectResult()
+  .then((result) => {
+    if (result.user) {
+      window.parent.postMessage({ type: 'LOGIN_SUCCESS' }, '*');
+    }
+  })
+  .catch((error) => {
+    window.parent.postMessage({
+      type: 'LOGIN_ERROR',
+      error: {
+        code: error.code,
+        message: error.message
+      }
+    }, '*');
+  });
     </script>
 </body>
 </html>
