@@ -246,48 +246,34 @@
         const auth = firebase.auth();
         const provider = new firebase.auth.GoogleAuthProvider();
         
-        // إعدادات مهمة للمصادقة
         provider.setCustomParameters({
-            prompt: 'select_account'
+            prompt: 'select_account',
+            hd: 'modweeb.com' // اختياري: تحديد نطاق المؤسسة
         });
 
         const googleSignInBtn = document.getElementById('googleSignIn');
-        let popupWindow = null;
-
+        
         googleSignInBtn.addEventListener('click', () => {
-            // إغلاق أي نافذة سابقة إن وجدت
-            if (popupWindow && !popupWindow.closed) {
-                popupWindow.close();
-            }
-
-            // فتح نافذة منبثقة جديدة
-            popupWindow = window.open('', 'authPopup', 'width=500,height=600,scrollbars=yes');
+            // فتح نافذة مصادقة جديدة
+            const authWindow = window.open('', 'authPopup', 'width=500,height=600');
             
-            // بدء عملية المصادقة
             auth.signInWithPopup(provider)
                 .then((result) => {
-                    // إرسال إشارة النجاح للصفحة الرئيسية
-                    window.parent.postMessage('LOGIN_SUCCESS', '*');
-                    popupWindow.close();
+                    // إرسال إشارة النجاح للصفحة الأصلية
+                    window.opener.postMessage('LOGIN_SUCCESS', '*');
+                    authWindow.close();
                 })
                 .catch((error) => {
                     console.error('Error:', error);
+                    authWindow.close();
                     
-                    // إرسال إشارة الخطأ للصفحة الرئيسية
-                    window.parent.postMessage('LOGIN_ERROR', '*');
-                    
-                    if (popupWindow && !popupWindow.closed) {
-                        popupWindow.close();
-                    }
-
                     const errorMessages = {
-                        'auth/popup-blocked': 'تم منع النافذة المنبثقة. يرجى السماح بالنوافذ المنبثقة لهذا الموقع.',
+                        'auth/popup-blocked': 'يجب السماح بالنوافذ المنبثقة لهذا الموقع',
                         'auth/popup-closed-by-user': 'تم إغلاق نافذة التسجيل',
-                        'auth/cancelled-popup-request': 'تم إلغاء العملية',
-                        'auth/network-request-failed': 'خطأ في الاتصال بالإنترنت'
+                        'auth/unauthorized-domain': 'النطاق غير مسموح به في إعدادات Firebase'
                     };
                     
-                    alert(errorMessages[error.code] || 'حدث خطأ أثناء التسجيل: ' + error.message);
+                    alert(errorMessages[error.code] || 'حدث خطأ: ' + error.message);
                 });
         });
     });
