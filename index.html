@@ -224,11 +224,12 @@
         </div>
     </div>
 
+<!-- ... (ابقى على نفس الهيكل HTML) ... -->
+
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
 
     <script>
-    // تهيئة Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyCX1fyr5N-vRTpHpgA7Mt6IWl5Yzm36cq0",
         authDomain: "mdwnplus-login.firebaseapp.com",
@@ -248,34 +249,31 @@
         
         provider.setCustomParameters({
             prompt: 'select_account',
-            hd: 'modweeb.com' // اختياري: تحديد نطاق المؤسسة
+            redirect_uri: window.location.origin
         });
 
-        const googleSignInBtn = document.getElementById('googleSignIn');
-        
-        googleSignInBtn.addEventListener('click', () => {
-            // فتح نافذة مصادقة جديدة
-            const authWindow = window.open('', 'authPopup', 'width=500,height=600');
-            
-            auth.signInWithPopup(provider)
-                .then((result) => {
-                    // إرسال إشارة النجاح للصفحة الأصلية
-                    window.opener.postMessage('LOGIN_SUCCESS', '*');
-                    authWindow.close();
+        document.getElementById('googleSignIn').addEventListener('click', () => {
+            auth.signInWithRedirect(provider)
+                .then(() => {
+                    console.log('Redirect initiated');
                 })
-                .catch((error) => {
+                .catch(error => {
                     console.error('Error:', error);
-                    authWindow.close();
-                    
-                    const errorMessages = {
-                        'auth/popup-blocked': 'يجب السماح بالنوافذ المنبثقة لهذا الموقع',
-                        'auth/popup-closed-by-user': 'تم إغلاق نافذة التسجيل',
-                        'auth/unauthorized-domain': 'النطاق غير مسموح به في إعدادات Firebase'
-                    };
-                    
-                    alert(errorMessages[error.code] || 'حدث خطأ: ' + error.message);
+                    alert('حدث خطأ في بدء عملية التسجيل');
                 });
         });
+
+        // معالجة نتيجة التسجيل
+        auth.getRedirectResult()
+            .then((result) => {
+                if (result.user) {
+                    window.opener.postMessage('LOGIN_SUCCESS', '*');
+                }
+            })
+            .catch(error => {
+                console.error('Login Error:', error);
+                window.opener.postMessage('LOGIN_ERROR', '*');
+            });
     });
     </script>
 </body>
