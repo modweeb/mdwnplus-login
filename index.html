@@ -246,56 +246,50 @@
         const auth = firebase.auth();
         const provider = new firebase.auth.GoogleAuthProvider();
         
-        // إعدادات مهمة لحل مشكلة accounts.google.com
+        // إعدادات مهمة للمصادقة
         provider.setCustomParameters({
-            redirect_uri: window.location.origin,
             prompt: 'select_account'
         });
 
         const googleSignInBtn = document.getElementById('googleSignIn');
-        let isProcessing = false;
+        let popupWindow = null;
 
-        googleSignInBtn.addEventListener('click', async () => {
-            if (isProcessing) return;
-            
-            isProcessing = true;
-            googleSignInBtn.disabled = true;
-            googleSignInBtn.innerHTML = '<span class="loading-spinner"></span> جاري التوجيه...';
-
-            try {
-                // استخدم signInWithRedirect بدلاً من signInWithPopup
-                await auth.signInWithRedirect(provider);
-                
-                // إعلام الصفحة الرئيسية ببدء العملية
-                window.parent.postMessage('LOGIN_STARTED', '*');
-            } catch (error) {
-                console.error('Error:', error);
-                isProcessing = false;
-                googleSignInBtn.disabled = false;
-                googleSignInBtn.innerHTML = 'تسجيل الدخول باستخدام جوجل';
-                
-                const errorMessages = {
-                    'auth/popup-blocked': 'المتصفح منع فتح نافذة التسجيل. يرجى السماح بالنوافذ المنبثقة لهذا الموقع.',
-                    'auth/popup-closed-by-user': 'تم إغلاق نافذة التسجيل',
-                    'auth/cancelled-popup-request': 'تم إلغاء العملية',
-                    'auth/network-request-failed': 'خطأ في الاتصال بالإنترنت'
-                };
-                
-                alert(errorMessages[error.code] || 'حدث خطأ أثناء التسجيل: ' + error.message);
+        googleSignInBtn.addEventListener('click', () => {
+            // إغلاق أي نافذة سابقة إن وجدت
+            if (popupWindow && !popupWindow.closed) {
+                popupWindow.close();
             }
-        });
 
-        // معالجة نتيجة التسجيل بعد العودة
-        auth.getRedirectResult()
-            .then((result) => {
-                if (result.user) {
+            // فتح نافذة منبثقة جديدة
+            popupWindow = window.open('', 'authPopup', 'width=500,height=600,scrollbars=yes');
+            
+            // بدء عملية المصادقة
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    // إرسال إشارة النجاح للصفحة الرئيسية
                     window.parent.postMessage('LOGIN_SUCCESS', '*');
-                }
-            })
-            .catch((error) => {
-                console.error('Login Error:', error);
-                window.parent.postMessage('LOGIN_ERROR', '*');
-            });
+                    popupWindow.close();
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    
+                    // إرسال إشارة الخطأ للصفحة الرئيسية
+                    window.parent.postMessage('LOGIN_ERROR', '*');
+                    
+                    if (popupWindow && !popupWindow.closed) {
+                        popupWindow.close();
+                    }
+
+                    const errorMessages = {
+                        'auth/popup-blocked': 'تم منع النافذة المنبثقة. يرجى السماح بالنوافذ المنبثقة لهذا الموقع.',
+                        'auth/popup-closed-by-user': 'تم إغلاق نافذة التسجيل',
+                        'auth/cancelled-popup-request': 'تم إلغاء العملية',
+                        'auth/network-request-failed': 'خطأ في الاتصال بالإنترنت'
+                    };
+                    
+                    alert(errorMessages[error.code] || 'حدث خطأ أثناء التسجيل: ' + error.message);
+                });
+        });
     });
     </script>
 </body>
