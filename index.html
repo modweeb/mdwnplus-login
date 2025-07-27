@@ -183,6 +183,7 @@
       to { transform: rotate(360deg); }
     }
     </style>
+     <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://*.firebaseio.com https://www.googleapis.com https://accounts.google.com; script-src 'self' https://*.firebaseio.com https://www.gstatic.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com;">
 </head>
 <body>
     <div class="container">
@@ -230,6 +231,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
 
     <script>
+    // تهيئة Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyCX1fyr5N-vRTpHpgA7Mt6IWl5Yzm36cq0",
         authDomain: "mdwnplus-login.firebaseapp.com",
@@ -247,88 +249,92 @@
         const auth = firebase.auth();
         const provider = new firebase.auth.GoogleAuthProvider();
         
+        // إعدادات مهمة للمصادقة
         provider.setCustomParameters({
             prompt: 'select_account',
-            redirect_uri: window.location.origin
+            hd: 'modweeb.com'
         });
 
-        document.getElementById('googleSignIn').addEventListener('click', () => {
-            auth.signInWithRedirect(provider)
-                .then(() => {
-                    console.log('Redirect initiated');
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('حدث خطأ في بدء عملية التسجيل');
-                });
-        });
+        const googleSignInBtn = document.getElementById('googleSignIn');
+        let popupWindow = null;
 
-        // معالجة نتيجة التسجيل
-        auth.getRedirectResult()
-            .then((result) => {
-                if (result.user) {
-                    window.opener.postMessage('LOGIN_SUCCESS', '*');
+        // دالة لفتح النافذة المنبثقة
+        function openAuthPopup() {
+            const popupFeatures = 'width=500,height=600,scrollbars=yes,top=100,left=100';
+            popupWindow = window.open('', 'authPopup', popupFeatures);
+            
+            // إضافة محتوى مؤقت للنافذة
+            popupWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>جاري التحميل...</title>
+                    <style>
+                        body { display: flex; justify-content: center; align-items: center; height: 100vh; }
+                        .loader { border: 5px solid #f3f3f3; border-top: 5px solid #4285F4; border-radius: 50%; width: 50px; height: 50px; animation: spin 2s linear infinite; }
+                        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+                    </style>
+                </head>
+                <body>
+                    <div class="loader"></div>
+                    <p>جاري تحميل صفحة المصادقة...</p>
+                </body>
+                </html>
+            `);
+        }
+
+        googleSignInBtn.addEventListener('click', async () => {
+            try {
+                // فتح النافذة المنبثقة أولاً
+                openAuthPopup();
+                
+                // بدء عملية المصادقة
+                const result = await auth.signInWithPopup(provider);
+                
+                // إغلاق النافذة بعد النجاح
+                if (popupWindow && !popupWindow.closed) {
+                    popupWindow.close();
                 }
-            })
-            .catch(error => {
-                console.error('Login Error:', error);
-                window.opener.postMessage('LOGIN_ERROR', '*');
-            });
+                
+                // إعلام الصفحة الرئيسية بالنجاح
+                window.parent.postMessage({
+                    type: 'LOGIN_SUCCESS',
+                    user: {
+                        uid: result.user.uid,
+                        displayName: result.user.displayName,
+                        email: result.user.email,
+                        photoURL: result.user.photoURL
+                    }
+                }, '*');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                
+                // إغلاق النافذة عند الخطأ
+                if (popupWindow && !popupWindow.closed) {
+                    popupWindow.close();
+                }
+                
+                // إعلام الصفحة الرئيسية بالخطأ
+                window.parent.postMessage({
+                    type: 'LOGIN_ERROR',
+                    error: {
+                        code: error.code,
+                        message: error.message
+                    }
+                }, '*');
+                
+                const errorMessages = {
+                    'auth/popup-blocked': 'تم منع النافذة المنبثقة. يرجى السماح بالنوافذ المنبثقة لهذا الموقع.',
+                    'auth/popup-closed-by-user': 'تم إغلاق نافذة التسجيل قبل إكمال العملية',
+                    'auth/cancelled-popup-request': 'تم إلغاء عملية التسجيل',
+                    'auth/network-request-failed': 'خطأ في الاتصال بالإنترنت'
+                };
+                
+                alert(errorMessages[error.code] || 'حدث خطأ أثناء التسجيل: ' + error.message);
+            }
+        });
     });
-    
-    // أضف هذا الكود في نهاية الملف
-window.addEventListener('message', (event) => {
-  // التحقق من المصدر
-  if (event.origin !== window.location.origin) return;
-  
-  if (event.data.type === 'SET_ORIGIN') {
-    window.ORIGIN = event.data.origin;
-  }
-});
-
-// تعديل معالج تسجيل الدخول
-document.getElementById('googleSignIn').addEventListener('click', async () => {
-  try {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    provider.setCustomParameters({
-      prompt: 'select_account',
-      redirect_uri: window.ORIGIN || 'https://mdwnplus.blogspot.com'
-    });
-    
-    // إعلام الصفحة الرئيسية ببدء العملية
-    window.parent.postMessage({ type: 'LOGIN_REDIRECT_STARTED' }, '*');
-    
-    // استخدم signInWithRedirect للتحكم الكامل
-    await auth.signInWithRedirect(provider);
-    
-  } catch (error) {
-    console.error('Login Error:', error);
-    window.parent.postMessage({
-      type: 'LOGIN_ERROR',
-      error: {
-        code: error.code,
-        message: error.message
-      }
-    }, '*');
-  }
-});
-
-// معالجة نتيجة التسجيل
-auth.getRedirectResult()
-  .then((result) => {
-    if (result.user) {
-      window.parent.postMessage({ type: 'LOGIN_SUCCESS' }, '*');
-    }
-  })
-  .catch((error) => {
-    window.parent.postMessage({
-      type: 'LOGIN_ERROR',
-      error: {
-        code: error.code,
-        message: error.message
-      }
-    }, '*');
-  });
     </script>
 </body>
 </html>
