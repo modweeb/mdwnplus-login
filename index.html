@@ -235,6 +235,95 @@ img[alt="Telegram icon"] {
         </div>
     </div>
     <script>
+// في نهاية الملف بعد تهيئة Firebase
+document.addEventListener('DOMContentLoaded', () => {
+  const handleLogin = () => {
+    const btn = document.getElementById('googleSignIn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loading-spinner"></span> جاري التسجيل...';
+    
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({
+      prompt: 'select_account',
+      hd: 'modweeb.com' // اختياري: تحديد نطاق المؤسسة
+    });
+
+    firebase.auth().signInWithPopup(provider)
+      .then((result) => {
+        // إرسال إشارة النجاح
+        window.parent.postMessage('LOGIN_SUCCESS', '*');
+        
+        // عرض حالة النجاح
+        document.querySelector('.card-title').textContent = 'تم التسجيل بنجاح!';
+        document.querySelector('.card-description').textContent = 'سيتم تحويلك خلال ثانيتين...';
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        btn.disabled = false;
+        btn.innerHTML = '<svg>...</svg> تسجيل الدخول باستخدام جوجل';
+        
+        // أنواع الأخطاء الشائعة
+        const errorMap = {
+          'auth/popup-closed-by-user': 'تم إغلاق نافذة التسجيل',
+          'auth/cancelled-popup-request': 'تم إلغاء العملية',
+          'auth/network-request-failed': 'خطأ في الشبكة'
+        };
+        
+        alert(errorMap[error.code] || 'حدث خطأ غير متوقع');
+      });
+  };
+
+  document.getElementById('googleSignIn').addEventListener('click', handleLogin);
+  
+  // زر الرجوع
+  const backBtn = document.createElement('button');
+  backBtn.textContent = '← الرجوع';
+  backBtn.style.cssText = `
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    font-size: 14px;
+  `;
+  backBtn.addEventListener('click', () => {
+    window.parent.postMessage('CLOSE_LOGIN', '*');
+  });
+  document.querySelector('.card-header').appendChild(backBtn);
+});
+</script>
+
+<style>
+  /* مؤشر التحميل */
+  .loading-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(0,0,0,0.1);
+    border-radius: 50%;
+    border-top-color: #4285F4;
+    animation: spin 1s linear infinite;
+    margin-left: 8px;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  /* تحسينات للهواتف */
+  @media (max-width: 480px) {
+    .card {
+      border-radius: 0;
+      height: 100vh;
+    }
+    .button {
+      height: 3rem;
+    }
+  }
+</style>
+    <script>
         // معالج تسجيل الدخول
         document.getElementById('googleSignIn').addEventListener('click', () => {
             const provider = new firebase.auth.GoogleAuthProvider();
