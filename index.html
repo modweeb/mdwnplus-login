@@ -165,16 +165,7 @@ body {
 .link:hover {
   color: #0f172a; /* Darker on hover */
 }
-
-/* Placeholder for the logo image */
-/* You should replace this with your actual logo image in the 'images' folder */
-img[alt="Google icon"],
-img[alt="RSS icon"],
-img[alt="Telegram icon"] {
-  display: inline-block;
-  vertical-align: middle;
-  margin-left: 0.5rem; /* Adjust as needed for RTL */
-}
+  
 </style>
 <!-- أضف Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
@@ -295,34 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-<style>
-  /* مؤشر التحميل */
-  .loading-spinner {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    border: 2px solid rgba(0,0,0,0.1);
-    border-radius: 50%;
-    border-top-color: #4285F4;
-    animation: spin 1s linear infinite;
-    margin-left: 8px;
-  }
-  
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-  
-  /* تحسينات للهواتف */
-  @media (max-width: 480px) {
-    .card {
-      border-radius: 0;
-      height: 100vh;
-    }
-    .button {
-      height: 3rem;
-    }
-  }
-</style>
+
     <script>
         // معالج تسجيل الدخول
         document.getElementById('googleSignIn').addEventListener('click', () => {
@@ -347,6 +311,31 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('حدث خطأ أثناء التسجيل: ' + error.message);
                 });
         });
+            // أضف هذا في صفحة GitHub
+window.addEventListener('message', (event) => {
+  if (event.data.type === 'FIREBASE_CONFIG') {
+    if (!firebase.apps.length) {
+      firebase.initializeApp(event.data.config);
+    }
+  }
+});
+
+// تعديل معالج تسجيل الدخول
+document.getElementById('googleSignIn').addEventListener('click', async () => {
+  try {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    
+    const result = await firebase.auth().signInWithPopup(provider);
+    window.parent.postMessage({ type: 'LOGIN_SUCCESS' }, '*');
+    
+  } catch (error) {
+    window.parent.postMessage({ 
+      type: 'LOGIN_ERROR', 
+      error: { code: error.code, message: error.message }
+    }, '*');
+  }
+});
     </script>
 </body>
 </html>
