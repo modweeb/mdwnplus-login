@@ -303,54 +303,24 @@ document.addEventListener('DOMContentLoaded', () => {
             if (result.user) {
                 // إرسال إشارة نجاح التسجيل
                 window.parent.postMessage('LOGIN_SUCCESS', '*');
-<script>
-// تهيئة Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyCX1fyr5N-vRTpHpgA7Mt6IWl5Yzm36cq0",
-    authDomain: "mdwnplus-login.firebaseapp.com",
-    projectId: "mdwnplus-login",
-    storageBucket: "mdwnplus-login.appspot.com",
-    messagingSenderId: "997108102235",
-    appId: "1:997108102235:web:570f556a26bf7c83e63b7e"
-};
-
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    const auth = firebase.auth();
-    const provider = new firebase.auth.GoogleAuthProvider();
-    
-    // إضافة هذه السطور لحل مشكلة accounts.google.com
-    provider.setCustomParameters({
-        redirect_uri: window.location.origin
-    });
-    
-    document.getElementById('googleSignIn').addEventListener('click', () => {
-        // استخدم signInWithRedirect بدلاً من Popup
-        auth.signInWithRedirect(provider)
-            .then(() => {
-                console.log('Redirecting to Google...');
-            })
-            .catch(error => {
-                console.error('Redirect Error:', error);
-                alert('حدث خطأ في التوجيه: ' + error.message);
-            });
-    });
-
-    // معالجة نتيجة التسجيل بعد العودة
-    auth.getRedirectResult()
-        .then((result) => {
-            if (result.user) {
-                window.parent.postMessage('LOGIN_SUCCESS', '*');
+                
+                // عرض رسالة نجاح
+                document.querySelector('.card-title').textContent = 'تم التسجيل بنجاح!';
+                document.querySelector('.card-description').textContent = 'جاري تحويلك إلى الصفحة الرئيسية...';
+                
+                // توجيه المستخدم بعد تأخير قصير
+                setTimeout(() => {
+                    window.location.href = 'https://mdwnplus.blogspot.com?login_success=1';
+                }, 2000);
             }
         })
-        .catch(error => {
-            console.error('Login Error:', error);
+        .catch((error) => {
+            console.error('Error handling redirect:', error);
             window.parent.postMessage('LOGIN_ERROR', '*');
         });
 });
+
+// ===== نهاية الكود المدمج =====
 </script>
     
 </body>
