@@ -4,170 +4,224 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تسجيل الدخول - تصميم مودويب</title>
-    
-    	<style>
+    <style>
     /* Basic Reset */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-body {
-  font-family: sans-serif; /* Using a generic sans-serif font */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background-color: #f3f4f6; /* Equivalent to bg-gray-100 */
-  padding: 1rem;
-  direction: rtl; /* For Arabic text direction */
-  text-align: right; /* Align text to the right for RTL */
-}
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background-color: #f3f4f6;
+      padding: 1rem;
+      direction: rtl;
+      text-align: right;
+    }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
 
-.logo-section {
-  margin-bottom: 2rem; /* Equivalent to mb-8 */
-  display: flex;
-  align-items: center;
-  gap: 0.5rem; /* Equivalent to gap-2 */
-  text-decoration: none;
-  color: #0f172a; /* Equivalent to text-foreground */
-}
+    .logo-section {
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: #0f172a;
+    }
 
-.logo-image {
-  height: 2rem; /* Equivalent to h-8 */
-  width: 2rem; /* Equivalent to w-8 */
-}
+    .logo-image {
+      height: 2rem;
+      width: 2rem;
+    }
 
-.logo-text {
-  font-size: 1.125rem; /* Equivalent to text-lg */
-  font-weight: 600; /* Equivalent to font-semibold */
-}
+    .logo-text {
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
 
-.card {
-  width: 100%;
-  max-width: 24rem; /* Equivalent to max-w-sm */
-  border-radius: 0.5rem; /* Equivalent to rounded-lg */
-  border: 1px solid #e5e7eb; /* Equivalent to border */
-  background-color: white; /* Equivalent to bg-card */
-  color: #0f172a; /* Equivalent to text-card-foreground */
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Equivalent to shadow-sm */
-}
+    .card {
+      width: 100%;
+      max-width: 24rem;
+      border-radius: 0.5rem;
+      border: 1px solid #e5e7eb;
+      background-color: white;
+      color: #0f172a;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
 
-.card-header {
-  padding: 1.5rem; /* Equivalent to p-6 */
-  text-align: center;
-}
+    .card-header {
+      padding: 1.5rem;
+      text-align: center;
+    }
 
-.card-title {
-  font-size: 1.5rem; /* Equivalent to text-2xl */
-  font-weight: 700; /* Equivalent to font-bold */
-  line-height: 1.375; /* Equivalent to leading-none */
-  letter-spacing: -0.025em; /* Equivalent to tracking-tight */
-  margin-bottom: 0.25rem; /* Equivalent to space-y-1.5 */
-}
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.375;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.25rem;
+    }
 
-.card-description {
-  font-size: 0.875rem; /* Equivalent to text-sm */
-  color: #6b7280; /* Equivalent to text-muted-foreground */
-}
+    .card-description {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
 
-.card-content {
-  padding: 1.5rem; /* Equivalent to p-6 */
-  padding-top: 0; /* Equivalent to pt-0 */
-  display: flex;
-  flex-direction: column;
-  gap: 1rem; /* Equivalent to space-y-4 */
-}
+    .card-content {
+      padding: 1.5rem;
+      padding-top: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
 
-.button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem; /* Equivalent to gap-2 */
-  white-space: nowrap;
-  border-radius: 0.375rem; /* Equivalent to rounded-md */
-  font-size: 0.875rem; /* Equivalent to text-sm */
-  font-weight: 500; /* Equivalent to font-medium */
-  height: 2.5rem; /* Equivalent to h-10 */
-  padding: 0.5rem 1rem; /* Equivalent to px-4 py-2 */
-  cursor: pointer;
-  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out, border-color 0.15s ease-in-out;
-  text-decoration: none; /* Remove underline for links acting as buttons */
-}
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+      border-radius: 0.375rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      height: 2.5rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+      text-decoration: none;
+    }
 
-.outline-button {
-  border: 1px solid #e5e7eb; /* Equivalent to border border-input */
-  background-color: transparent; /* Equivalent to bg-transparent */
-  color: #0f172a; /* Equivalent to text-foreground */
-}
+    .outline-button {
+      border: 1px solid #e5e7eb;
+      background-color: transparent;
+      color: #0f172a;
+    }
 
-.outline-button:hover {
-  background-color: #f3f4f6; /* Equivalent to hover:bg-accent */
-  color: #0f172a; /* Equivalent to hover:text-accent-foreground */
-}
+    .outline-button:hover {
+      background-color: #f3f4f6;
+      color: #0f172a;
+    }
 
-.default-button {
-  background-color: #0f172a; /* Equivalent to bg-primary */
-  color: #f9fafb; /* Equivalent to text-primary-foreground */
-  border: 1px solid #0f172a;
-}
+    .default-button {
+      background-color: #0f172a;
+      color: #f9fafb;
+      border: 1px solid #0f172a;
+    }
 
-.default-button:hover {
-  background-color: #1f2937; /* Slightly darker for hover */
-}
+    .default-button:hover {
+      background-color: #1f2937;
+    }
 
-.button-icon {
-  height: 1rem; /* Equivalent to h-4 */
-  width: 1rem; /* Equivalent to w-4 */
-  flex-shrink: 0; /* Equivalent to shrink-0 */
-}
+    .button-icon {
+      height: 1rem;
+      width: 1rem;
+      flex-shrink: 0;
+    }
 
-.white-icon {
-  filter: brightness(0) invert(1); /* Makes a black icon white */
-}
+    .white-icon {
+      filter: brightness(0) invert(1);
+    }
 
-.button-group {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem; /* Equivalent to gap-2 */
-}
+    .button-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
 
-.flex-item {
-  flex: 1 1 0%; /* Equivalent to flex-1 */
-  width: 100%; /* Ensure it takes full width within its flex item */
-}
+    .flex-item {
+      flex: 1 1 0%;
+      width: 100%;
+    }
 
-.privacy-text {
-  padding-left: 2rem; /* Equivalent to px-8 */
-  padding-right: 2rem; /* Equivalent to px-8 */
-  text-align: center;
-  font-size: 0.875rem; /* Equivalent to text-sm */
-  color: #6b7280; /* Equivalent to text-muted-foreground */
-}
+    .privacy-text {
+      padding-left: 2rem;
+      padding-right: 2rem;
+      text-align: center;
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
 
-.link {
-  text-decoration: underline;
-  color: inherit; /* Inherit color from parent */
-}
+    .link {
+      text-decoration: underline;
+      color: inherit;
+    }
 
-.link:hover {
-  color: #0f172a; /* Darker on hover */
-}
-  
-</style>
-<!-- أضف Firebase SDK -->
+    .link:hover {
+      color: #0f172a;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(0,0,0,0.1);
+      border-radius: 50%;
+      border-top-color: #4285F4;
+      animation: spin 1s linear infinite;
+      margin-left: 8px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="https://modweeb.com" class="logo-section">
+            <span class="logo-text">تصميم مودويب</span>
+        </a>
+
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">مرحباً بعودتك</h1>
+                <p class="card-description">تسجيل الدخول بحسابك الاجتماعي</p>
+            </div>
+            <div class="card-content">
+                <button id="googleSignIn" class="button outline-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" class="button-icon">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    تسجيل الدخول باستخدام جوجل
+                </button>
+                <div class="button-group">
+                    <a href="https://modweeb.com" class="button default-button flex-item">
+                        تابع المدونة
+                    </a>
+                    <a href="https://t.me/modweeb" class="button default-button flex-item">
+                        تابعنا على تيليجرام
+                    </a>
+                </div>
+                <p class="privacy-text">
+                    بالنقر على متابعة، فإنك توافق على
+                    <a href="https://www.modweeb.com/p/terms.html" class="link"> شروط الخدمة</a>
+                    و
+                    <a href="https://www.modweeb.com/p/privacy-policy.html" class="link"> سياسة الخصوصية</a>
+                    الخاصة بنا.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
     
@@ -181,161 +235,76 @@ body {
             messagingSenderId: "997108102235",
             appId: "1:997108102235:web:570f556a26bf7c83e63b7e"
         };
-        firebase.initializeApp(firebaseConfig);
-    </script>
-</head>
-<body>
-    <div class="container">
-        <a href="https://modweeb.com" class="logo-section">
-            
-            <span class="logo-text">تصميم مودويب</span>
-        </a>
-
-        <div class="card">
-            <div class="card-header">
-                <h1 class="card-title">مرحباً بعودتك</h1>
-                <p class="card-description">تسجيل الدخول بحسابك الاجتماعي</p>
-            </div>
-            <div class="card-content">
-                <!-- استبدال زر جوجل بالكود الجديد -->
-    <button id="googleSignIn" class="button outline-button">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" class="button-icon">
-            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-        </svg>
-        تسجيل الدخول باستخدام جوجل
-    </button>
-                <div class="button-group">
-                    <a href="https://modweeb.com" class="button default-button flex-item">
-                         تابع المدونة
-                    </a>
-                    <a href="https://t.me/modweeb" class="button default-button flex-item">
-                         تابعنا على تيليجرام
-                    </a>
-                </div>
-                <p class="privacy-text">
-                    بالنقر على متابعة، فإنك توافق على
-                    <a href="https://www.modweeb.com/p/terms.html" class="link"> شروط الخدمة</a>
-                    و
-                    <a href="https://www.modweeb.com/p/privacy-policy.html" class="link"> سياسة الخصوصية</a>
-                    الخاصة بنا.
-                </p>
-            </div>
-        </div>
-    </div>
-    <script>
-// في نهاية الملف بعد تهيئة Firebase
-document.addEventListener('DOMContentLoaded', () => {
-  const handleLogin = () => {
-    const btn = document.getElementById('googleSignIn');
-    btn.disabled = true;
-    btn.innerHTML = '<span class="loading-spinner"></span> جاري التسجيل...';
-    
-    const provider = new firebase.auth.GoogleAuthProvider();
-    provider.setCustomParameters({
-      prompt: 'select_account',
-      hd: 'modweeb.com' // اختياري: تحديد نطاق المؤسسة
-    });
-
-    firebase.auth().signInWithPopup(provider)
-      .then((result) => {
-        // إرسال إشارة النجاح
-        window.parent.postMessage('LOGIN_SUCCESS', '*');
         
-        // عرض حالة النجاح
-        document.querySelector('.card-title').textContent = 'تم التسجيل بنجاح!';
-        document.querySelector('.card-description').textContent = 'سيتم تحويلك خلال ثانيتين...';
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        btn.disabled = false;
-        btn.innerHTML = '<svg>...</svg> تسجيل الدخول باستخدام جوجل';
-        
-        // أنواع الأخطاء الشائعة
-        const errorMap = {
-          'auth/popup-closed-by-user': 'تم إغلاق نافذة التسجيل',
-          'auth/cancelled-popup-request': 'تم إلغاء العملية',
-          'auth/network-request-failed': 'خطأ في الشبكة'
-        };
-        
-        alert(errorMap[error.code] || 'حدث خطأ غير متوقع');
-      });
-  };
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const auth = firebase.auth();
 
-  document.getElementById('googleSignIn').addEventListener('click', handleLogin);
-  
-  // زر الرجوع
-  const backBtn = document.createElement('button');
-  backBtn.textContent = '← الرجوع';
-  backBtn.style.cssText = `
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: transparent;
-    border: none;
-    color: #666;
-    cursor: pointer;
-    font-size: 14px;
-  `;
-  backBtn.addEventListener('click', () => {
-    window.parent.postMessage('CLOSE_LOGIN', '*');
-  });
-  document.querySelector('.card-header').appendChild(backBtn);
-});
-</script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const googleSignInBtn = document.getElementById('googleSignIn');
+            let isSigningIn = false;
 
+            googleSignInBtn.addEventListener('click', async () => {
+                if (isSigningIn) return;
+                
+                isSigningIn = true;
+                googleSignInBtn.disabled = true;
+                googleSignInBtn.innerHTML = '<span class="loading-spinner"></span> جاري التسجيل...';
 
-    <script>
-        // معالج تسجيل الدخول
-        document.getElementById('googleSignIn').addEventListener('click', () => {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            
-            firebase.auth().signInWithPopup(provider)
+                try {
+                    const provider = new firebase.auth.GoogleAuthProvider();
+                    provider.setCustomParameters({
+                        prompt: 'select_account'
+                    });
+
+                    // استخدم signInWithRedirect بدلاً من signInWithPopup
+                    await auth.signInWithRedirect(provider);
+                    
+                    // بعد العودة من التسجيل، سيتم التعامل مع النتيجة في auth.getRedirectResult()
+                } catch (error) {
+                    console.error('Error signing in:', error);
+                    isSigningIn = false;
+                    googleSignInBtn.disabled = false;
+                    googleSignInBtn.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" class="button-icon">
+                            <!-- أيقونة جوجل -->
+                        </svg>
+                        تسجيل الدخول باستخدام جوجل
+                    `;
+                    
+                    const errorMessages = {
+                        'auth/popup-closed-by-user': 'تم إغلاق نافذة التسجيل',
+                        'auth/cancelled-popup-request': 'تم إلغاء عملية التسجيل',
+                        'auth/network-request-failed': 'خطأ في الاتصال بالإنترنت'
+                    };
+                    
+                    alert(errorMessages[error.code] || 'حدث خطأ أثناء التسجيل: ' + error.message);
+                }
+            });
+
+            // معالجة نتيجة التسجيل بعد العودة
+            auth.getRedirectResult()
                 .then((result) => {
-                    // إرسال إشارة للصفحة الأم بالإغلاق
-                    window.parent.postMessage('LOGIN_SUCCESS', '*');
-                    
-                    // توجيه المستخدم بعد 2 ثانية
-                    setTimeout(() => {
-                        window.location.href = 'https://mdwnplus.blogspot.com';
-                    }, 2000);
-                    
-                    // عرض رسالة نجاح
-                    document.querySelector('.card-title').textContent = 'تم التسجيل بنجاح!';
-                    document.querySelector('.card-description').textContent = 'جاري تحويلك إلى الصفحة الرئيسية...';
+                    if (result.user) {
+                        // إرسال إشارة نجاح التسجيل للصفحة الأم
+                        window.parent.postMessage('LOGIN_SUCCESS', '*');
+                        
+                        // عرض رسالة نجاح
+                        document.querySelector('.card-title').textContent = 'تم التسجيل بنجاح!';
+                        document.querySelector('.card-description').textContent = 'جاري تحويلك إلى الصفحة الرئيسية...';
+                        
+                        // توجيه المستخدم بعد تأخير قصير
+                        setTimeout(() => {
+                            window.location.href = 'https://mdwnplus.blogspot.com?login_success=1';
+                        }, 2000);
+                    }
                 })
                 .catch((error) => {
-                    console.error('Error:', error);
-                    alert('حدث خطأ أثناء التسجيل: ' + error.message);
+                    console.error('Error handling redirect:', error);
                 });
         });
-            // أضف هذا في صفحة GitHub
-window.addEventListener('message', (event) => {
-  if (event.data.type === 'FIREBASE_CONFIG') {
-    if (!firebase.apps.length) {
-      firebase.initializeApp(event.data.config);
-    }
-  }
-});
-
-// تعديل معالج تسجيل الدخول
-document.getElementById('googleSignIn').addEventListener('click', async () => {
-  try {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: 'select_account' });
-    
-    const result = await firebase.auth().signInWithPopup(provider);
-    window.parent.postMessage({ type: 'LOGIN_SUCCESS' }, '*');
-    
-  } catch (error) {
-    window.parent.postMessage({ 
-      type: 'LOGIN_ERROR', 
-      error: { code: error.code, message: error.message }
-    }, '*');
-  }
-});
     </script>
 </body>
 </html>
